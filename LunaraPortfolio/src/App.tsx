@@ -27,6 +27,7 @@ import {
   teamLinks,
   testingDetails,
 } from './siteContent';
+import { usePretextFontsReady } from './usePretextFontsReady';
 
 const DROP_CAP_LINE_SPAN = 3;
 const NARRATIVE_FONT = '400 16.5px Inter, "Segoe UI", sans-serif';
@@ -335,8 +336,12 @@ function CodeShowcase() {
 }
 
 function PretextNarrative() {
+  const fontsReady = usePretextFontsReady();
   const { ref, width } = useElementWidth<HTMLDivElement>();
-  const layout = useMemo(() => buildNarrativeLayout(width), [width]);
+  const layout = useMemo(
+    () => (fontsReady ? buildNarrativeLayout(width) : null),
+    [fontsReady, width]
+  );
 
   if (!layout) {
     return (
@@ -347,11 +352,12 @@ function PretextNarrative() {
   }
 
   const allLines = [...layout.col1Lines, ...layout.col2Lines];
+  const isReady = fontsReady && width > 0;
 
   return (
     <div
       ref={ref}
-      className="pretext-narrative"
+      className={`pretext-narrative${isReady ? ' pretext-narrative--ready' : ''}`}
       style={{ height: layout.totalHeight }}
     >
       {layout.colGap > 0 && (
@@ -408,9 +414,15 @@ function PretextNarrative() {
 }
 
 function App() {
+  const fontsReady = usePretextFontsReady();
   const { ref, width } = useElementWidth<HTMLDivElement>();
 
-  const editorialLayout = useMemo(() => buildEditorialLayout(width), [width]);
+  const editorialLayout = useMemo(
+    () => (fontsReady ? buildEditorialLayout(width) : buildEditorialLayout(0)),
+    [fontsReady, width]
+  );
+
+  const editorialReady = fontsReady && width > 0;
 
   const resolvedArtifactLinks = useMemo(
     () =>
@@ -491,7 +503,11 @@ function App() {
 
         <div className="editorial-shell">
           <div className="editorial-stage">
-            <div className="editorial-text-layer" ref={ref} style={editorialTextStyle}>
+            <div
+              className={`editorial-text-layer${editorialReady ? ' editorial-text-layer--ready' : ''}`}
+              ref={ref}
+              style={editorialTextStyle}
+            >
               {editorialLayout.dropCap.char && (
                 <span
                   className="editorial-drop-cap"

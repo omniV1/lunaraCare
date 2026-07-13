@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700;800&family=Luxurious+Script&family=Luxurious+Roman&display=swap');
-
 :root {
   color-scheme: light;
   font-family: Inter, "Segoe UI", sans-serif;
@@ -304,6 +302,12 @@ pre {
   color: var(--lunara-text);
   text-align: justify;
   text-align-last: left;
+  white-space: nowrap;
+}
+
+.editorial-text-layer:not(.editorial-text-layer--ready) {
+  visibility: hidden;
+  min-height: 12rem;
 }
 
 .editorial-obstacle {
@@ -367,6 +371,12 @@ pre {
   color: rgba(78, 27, 0, 0.82);
   text-align: justify;
   text-align-last: left;
+  white-space: nowrap;
+}
+
+.pretext-narrative:not(.pretext-narrative--ready) .pretext-line,
+.pretext-narrative:not(.pretext-narrative--ready) .pretext-pull-quote {
+  visibility: hidden;
 }
 
 .pretext-divider {
